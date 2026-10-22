@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+dist-web/
+.env*
+!.env.example
+dist-native/
+dist-v02/
+server/*.sqlite3
+server/*.sqlite3-*
+__pycache__/

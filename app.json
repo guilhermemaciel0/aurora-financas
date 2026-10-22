@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Aurora Finan\u00e7as",
+    "slug": "aurora-financas",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.guilhermemaciel.aurora"
+    },
+    "android": {
+      "package": "com.guilhermemaciel.aurora"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
