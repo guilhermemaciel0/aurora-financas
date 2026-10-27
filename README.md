@@ -1,4 +1,30 @@
-# Aurora Finanças — versão 0.2.0
+# Novidades da etapa 3
+
+Acesse **Atividades → Importar extrato CSV**. Escolha um arquivo no celular/computador ou cole seu conteúdo, selecione a conta, confirme as colunas e o formato decimal, gere a prévia, revise e confirme.
+
+- Suporta CSV UTF-8 com vírgula ou ponto e vírgula, aspas e quebras de linha em campos. Datas DD/MM/AAAA ou AAAA-MM-DD. Até 1 MB/500 registros por lote.
+- Mapeamento de data, descrição, valor e identificador opcional. Formato decimal e sinal são explícitos: ponto/comma decimal; positivos como entradas ou saídas. CSV com colunas separadas de crédito e débito precisa ser convertido para uma coluna com valores assinados.
+- Prévia paginada: selecionar/desmarcar linhas, escolher categorias, classificar transferências internas ou pagamentos de faturas existentes. Linhas inválidas ficam fora e exibem motivo.
+- Duplicidades por identificador da conta são bloqueadas. Mesmo valor/data com ou sem descrição igual é sinalizado para revisão, incluindo lançamentos manuais e a outra ponta de transferências internas. Sem identificador, não é possível garantir que toda duplicidade será detectada.
+- Possível duplicado só entra após confirmar que é outra movimentação. Reimportar IDs já salvos é bloqueado. Identificador deve ser único por movimentação dentro da conta.
+- Cada importação recebe um lote; os últimos cinco lotes com lançamentos podem ser desfeitos com confirmação na tela. Isso remove apenas os registros daquele lote.
+- O saldo inicial da conta deve representar o início do período. Importar histórico sobre um saldo inicial que já representa hoje gera contagem incorreta: nenhum ajuste automático de saldo é feito.
+- Importação é local e só chega ao servidor quando você usar “Enviar dados deste aparelho”. CSV de faturas de cartão não é suportado: não importe como conta corrente, pois isso distorce o saldo e duplica despesas.
+- Exemplos fictícios em `examples/`. O primeiro exemplo tem entrada de R$ 1.000 e duas saídas que somam R$ 45,90: variação esperada de R$ 954,10.
+- Mensagens de login agora explicam email inválido, senha curta e demora de conexão antes de retornar um aviso genérico.
+
+## Atualizar a versão já instalada sem apagar seus dados
+1. Exporte uma cópia JSON em Ajustes e envie ao servidor, se disponível.
+2. Pare o Expo. Extraia o ZIP e copie os arquivos da pasta `aurora-financas` por cima da pasta existente. O pacote não contém banco SQLite, pasta `android`, `node_modules` ou dados locais; preserve essas pastas e qualquer configuração sua.
+3. Na pasta do projeto, execute `npm ci` e `npm run android -- --device R9WTA0Q2Z6W` (troque o identificador se necessário). Java 17 precisa estar selecionado. A recompilação é necessária porque o seletor de arquivos usa um novo módulo nativo.
+4. Não desinstale o aplicativo nem limpe seus dados. Mantivemos o identificador do pacote e a chave do armazenamento local.
+5. Se for usar USB, refaça `adb -d reverse tcp:8081 tcp:8081` e `adb -d reverse tcp:8787 tcp:8787`. Reinicie o servidor Python apenas se ele estiver parado.
+
+A validação automatizada cobre parse, precisão de centavos, sinal, datas inválidas, IDs repetidos, duplicados manuais, transferências nas duas direções, pagamentos sem dupla contagem, desfazer lote e atomicidade. Exportação para três plataformas verificada. Seleção de arquivo e aparência ainda precisam de teste no celular físico.
+
+---
+
+# Aurora Finanças — versão 0.3.0
 
 App experimental para Android, iPhone e web. Esta etapa adiciona cartões, compras parceladas, faturas e um servidor com login e sincronização manual. Não inclui conexão ao MeuPluggy nem IA externa. O nome Aurora é provisório.
 
@@ -97,11 +123,11 @@ Expo Go precisa ser compatível com SDK 54; caso contrário, usar development bu
 npm test
 python3 -m unittest discover -s server -p 'test_*.py'
 ```
-Nove testes financeiros e um teste de integração da API com múltiplas verificações: autenticação, isolamento, persistência, conflito de revisão, payload inválido e revogação de sessão. Exportação web/Android/iOS verificada; testes visuais e em dispositivos físicos permanecem pendentes.
+21 testes financeiros/importação e um teste de integração da API com múltiplas verificações: autenticação, isolamento, persistência, conflito de revisão, payload inválido e revogação de sessão. Exportação web/Android/iOS verificada; testes visuais e em dispositivos físicos permanecem pendentes.
 
 ## Próximas etapas
 - Validar navegação, formulários e conexão em Android/iPhone.
-- Importação CSV com prévia e deduplicação; restauração de backup.
+- Importação de PDF/OFX e faturas; restauração de backup.
 - Evoluir sincronização para operações incrementais.
 - Validar acesso ao MeuPluggy e implementar adaptador no backend, sem credenciais no app.
 - IA externa e agentes após a base de dados e autenticação amadurecerem.

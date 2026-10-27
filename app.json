@@ -2,7 +2,7 @@
   "expo": {
     "name": "Aurora Finan\u00e7as",
     "slug": "aurora-financas",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "ios": {

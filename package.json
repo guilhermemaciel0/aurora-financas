@@ -1,6 +1,6 @@
 {
   "name": "aurora-financas",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -11,14 +11,16 @@
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
-    "expo": "~54.0.0",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-dom": "19.1.0",
-    "react-native-web": "^0.21.0",
     "@expo/metro-runtime": "~6.1.2",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "expo": "~54.0.0",
+    "expo-document-picker": "~14.0.8",
+    "expo-file-system": "~19.0.24",
+    "expo-status-bar": "~3.0.8",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
     "react-native-safe-area-context": "~5.6.0",
-    "expo-status-bar": "~3.0.8"
+    "react-native-web": "^0.21.0"
   }
 }
