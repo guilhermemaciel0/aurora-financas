@@ -5,6 +5,15 @@ from pathlib import Path
 DB=os.environ.get('AURORA_DB',str(Path(__file__).with_name('aurora.sqlite3')))
 ORIGINS=set(os.environ.get('AURORA_ORIGINS','http://localhost:8081,http://localhost:8080').split(','))
 LIMIT=2_000_000
+# Shared client forms can retain unused fields, such as target='' on a
+# transaction or limit='' on a purchase. Validate money for this record type.
+MONEY_FIELDS={
+ 'accounts':('opening',),
+ 'transactions':('amount',),
+ 'goals':('target',),
+ 'cards':('limit',),
+ 'purchases':('amount',),
+}
 lock=threading.Lock(); attempts={}
 def connect():
  c=sqlite3.connect(DB,timeout=10);c.row_factory=sqlite3.Row;return c
@@ -21,7 +30,7 @@ def validate_state(s):
   for item in s.get(k,[]):
    if not isinstance(item,dict) or not isinstance(item.get('id'),str) or item['id'] in ids:raise ValueError('Identificador inválido/duplicado.')
    ids.add(item['id'])
-   for field in ['amount','opening','limit','target']:
+   for field in MONEY_FIELDS[k]:
     if field in item and (type(item[field]) is not int or abs(item[field])>10**12):raise ValueError('Valor monetário inválido.')
  if not s.get('accounts'):raise ValueError('É necessária pelo menos uma conta.')
  accounts={x['id'] for x in s['accounts']};cards={x['id'] for x in s.get('cards',[])}
